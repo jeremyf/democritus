@@ -1,11 +1,12 @@
 module Democritus
   class ClassBuilder
-    # @api public
-    def generate_class
-      Class.new do
-        include DemocritusObjectTag
-      end
+
+    def initialize
+      self.customization_module = Module.new
     end
+
+    attr_accessor :customization_module
+    private :customization_module=
 
     # @api public
     #
@@ -13,6 +14,14 @@ module Democritus
     # it for configuration of the given class.
     def customize(&customization_block)
       return unless customization_block
+      customization_module.module_exec(self, &customization_block)
+    end
+
+    # @api public
+    def generate_class
+      Class.new do
+        include DemocritusObjectTag
+      end
     end
   end
 end
