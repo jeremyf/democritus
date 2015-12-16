@@ -2,8 +2,12 @@ require "democritus/version"
 require 'democritus/class_builder'
 
 module Democritus
-  def self.build
+  # @api public
+  #
+  # Responsible for building a class based on atomic components.
+  def self.build(&configuration_block)
     builder = ClassBuilder.new
+    builder.customize(&configuration_block)
     builder.generate_class
   end
 
