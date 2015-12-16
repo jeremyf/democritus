@@ -2,7 +2,9 @@ module Democritus
   class ClassBuilder
     # @api public
     def generate_class
-      Class.new
+      Class.new do
+        include DemocritusObjectTag
+      end
     end
 
     # @api public
