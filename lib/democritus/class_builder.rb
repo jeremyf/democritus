@@ -10,8 +10,8 @@ module Democritus
 
     # @api public
     #
-    # Responsible for capturing the customization block and applying executing
-    # it for configuration of the given class.
+    # Responsible for executing the customization block against the
+    # customization module with the scope of this builder class.
     def customize(&customization_block)
       return unless customization_block
       customization_module.module_exec(self, &customization_block)
