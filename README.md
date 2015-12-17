@@ -1,3 +1,3 @@
 # Democritus
 
-A placeholder for a great gem.
+Democritus is a plugin for building class from reusable components.
