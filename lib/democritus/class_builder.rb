@@ -1,6 +1,8 @@
 module Democritus
+  # Responsible for building a class based on the customization methods.
+  #
+  # @see ./spec/lib/democritus/class_builder_spec.rb
   class ClassBuilder
-
     def initialize
       self.customization_module = Module.new
     end
