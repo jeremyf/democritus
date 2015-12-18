@@ -8,11 +8,9 @@ module Democritus
       self.customization_module = Module.new
     end
 
-    attr_reader :customization_module
-
     private
 
-    attr_writer :customization_module
+    attr_accessor :customization_module
 
     public
 
