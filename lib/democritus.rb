@@ -8,6 +8,9 @@ module Democritus
   # @api public
   #
   # Responsible for building a class based on atomic components.
+  #
+  # @yield [Democritus::ClassBuilder] Gives a builder to provide additional command style customizations
+  # @return Class
   def self.build(&configuration_block)
     builder = ClassBuilder.new
     builder.customize(&configuration_block)
