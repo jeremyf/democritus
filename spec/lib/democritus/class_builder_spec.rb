@@ -15,6 +15,15 @@ module Democritus
     its(:generate_class) { should be_a(Class) }
     its(:customization_module) { should be_a(Module) }
 
+    context '.command_name_for_method' do
+      it 'converts single word method' do
+        expect(described_class.command_name_for_method(:test)).to eq('Test')
+      end
+      it 'converts multi-word method' do
+        expect(described_class.command_name_for_method(:test_something)).to eq('TestSomething')
+      end
+    end
+
     it 'responds to commands defined in ClassBuilder::Commands' do
       expect(subject).to respond_to(:test_command)
     end
@@ -36,6 +45,10 @@ module Democritus
     context '#customize' do
       it 'will return nil if no block is passed' do
         expect(subject.customize).to be_nil
+      end
+
+      it 'will return nil if a block is passed' do
+        expect(subject.customize { |*| def hello_world; end }).to be_nil
       end
 
       it 'will add instance methods defined in the block to the instance methods of the customization module' do
