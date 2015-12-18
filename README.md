@@ -7,15 +7,25 @@ It also aims to address the needs of Sipity's yet to be developed sibling applic
 
 I'm looking to apply the ideas put forward in Avdi Grimm's [Naught gem](https://github.com/avdi/naught).
 
-# Roadmap
+## Goal
+
+```ruby
+ApproveForm = Democritus.build do |builder|
+  builder.form
+  builder.action_name('approve')
+  builder.attribute('agree_to_terms_of_service', type: :Boolean)
+end
+```
+
+## Roadmap
 
 * Plugin for declaring a form
-  * #submit
-  * #valid?
-  * #persisted?
-  * #to_param
-  * #model_name
+  - #submit
+  - #valid?
+  - #persisted?
+  - #to_param
+  - #model_name
 * Plugin for declaring an attribute
-  * setter method
-  * getter method
+  - setter method
+  - getter method
 * Plugin for declaring a view object
