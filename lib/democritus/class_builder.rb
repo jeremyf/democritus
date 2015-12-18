@@ -25,6 +25,11 @@ module Democritus
     end
 
     # @api public
+    #
+    # Responsible for generating a Class object based on the customizations
+    # applied via a customize block.
+    #
+    # @return Class object
     public def generate_class
       Class.new do
         include DemocritusObjectTag
