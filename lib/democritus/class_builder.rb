@@ -17,10 +17,22 @@ module Democritus
     # @api public
     #
     # Responsible for executing the customization block against the
-    # customization module with the scope of this builder class.
+    # customization module with the builder class as a parameter.
+    #
+    # @yield [Democritus::ClassBuilder] the means to build your custom class.
+    #
+    # @example
+    #   ClassBuilder.new.customize do |builder|
+    #     builder.command('paramter')
+    #     def to_s; 'parameter'; end
+    #   end
+    #
+    # @return nil
+    # @see ./spec/lib/democritus/class_builder_spec.rb
     public def customize(&customization_block)
       return unless customization_block
       customization_module.module_exec(self, &customization_block)
+      return nil
     end
 
     # @api public
