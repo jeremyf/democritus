@@ -1,5 +1,6 @@
 module Democritus
-  # Responsible for building a class based on the customization methods.
+  # Responsible for building a class based on the customization's applied
+  # through the #customize method.
   #
   # @see ./spec/lib/democritus/class_builder_spec.rb
   class ClassBuilder
