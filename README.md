@@ -5,6 +5,8 @@ Democritus is a plugin for building class from reusable components.
 Democritus is inspired as followup of a common pattern that I saw in the development of [Sipity's](https://github.com/ndlib/sipity/) form objects.
 It also aims to address the needs of Sipity's yet to be developed sibling application; The dissemination of processed data.
 
+I'm looking to apply the ideas put forward in Avdi Grimm's [Naught gem](https://github.com/avdi/naught).
+
 # Roadmap
 
 * Plugin for declaring a form
