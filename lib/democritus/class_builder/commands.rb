@@ -5,3 +5,6 @@ module Democritus
   module Commands
   end
 end
+
+require 'democritus/class_builder/commands/attribute'
+require 'democritus/class_builder/commands/attributes'
