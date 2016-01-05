@@ -1,5 +1,8 @@
 # Democritus
 
+[![Build Status](https://travis-ci.org/jeremyf/democritus.png?branch=master)](https://travis-ci.org/jeremyf/democritus)
+[![APACHE 2 License](http://img.shields.io/badge/APACHE2-license-blue.svg)](./LICENSE)
+
 Democritus is a plugin for building class from reusable components.
 
 Democritus is inspired as followup of a common pattern that I saw in the development of [Sipity's](https://github.com/ndlib/sipity/) form objects.
