@@ -59,7 +59,7 @@ module Democritus
       command_name = self.class.command_name_for_method(method_name)
       if command_namespace.const_defined?(command_name)
         command_class = command_namespace.const_get(command_name)
-        command_class.new(self, *args, &block).call
+        command_class.new(*args, builder: self, &block).call
       else
         super
       end

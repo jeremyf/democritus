@@ -35,7 +35,7 @@ module Democritus
     it 'translates method calls into namespaced command invocations including arguments' do
       test_command = double
       expect(described_class::AlternateCommands::AlternateTestCommand).to receive(:new).
-        with(subject, 'foo', 42).
+        with('foo', 42, builder: subject).
         and_return(test_command)
       expect(test_command).to receive(:call).and_return('COMMAND RESULT')
       expect(subject.alternate_test_command('foo', 42, command_namespace: described_class::AlternateCommands)).to eq('COMMAND RESULT')
@@ -44,7 +44,7 @@ module Democritus
     it 'translates method calls into command invocations including arguments' do
       test_command = double
       expect(described_class::Commands::TestCommand).to receive(:new).
-        with(subject, 'foo', 42).
+        with('foo', 42, builder: subject).
         and_return(test_command)
       expect(test_command).to receive(:call).and_return('COMMAND RESULT')
       expect(subject.test_command('foo', 42)).to eq('COMMAND RESULT')
