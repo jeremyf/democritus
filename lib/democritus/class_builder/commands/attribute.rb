@@ -13,6 +13,7 @@ module Democritus
 
         attr_reader :name, :options
 
+        # :reek:NestedIterators: { exclude: [ 'Democritus::ClassBuilder::Commands::Attribute#call' ] }
         def call
           defer do |subject|
             subject.module_exec(@name) do |name|

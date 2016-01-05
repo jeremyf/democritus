@@ -3,6 +3,8 @@ module Democritus
   # through the #customize method.
   #
   # @see ./spec/lib/democritus/class_builder_spec.rb
+  #
+  # :reek:UnusedPrivateMethod: { exclude: [ !ruby/regexp /(method_missing|respond_to_missing)/ ] }
   class ClassBuilder
     def initialize
       self.customization_module = Module.new
@@ -66,6 +68,8 @@ module Democritus
     #   an_instance_of_the_dynamic_class = dynamic_class.new
     #
     # @return Class object
+    #
+    # :reek:TooManyStatements: { exclude: [ 'Democritus::ClassBuilder#generate_class' ] }
     def generate_class
       generation_mod = generation_module # get a local binding
       customization_mod = customization_module # get a local binding
@@ -90,6 +94,7 @@ module Democritus
 
     private
 
+    # :reek:UtilityFunction: { exclude: [ 'Democritus::ClassBuilder#apply_operations' ] }
     def apply_operations(operations, module_or_class)
       operations.each do |operation|
         operation.call(module_or_class)
