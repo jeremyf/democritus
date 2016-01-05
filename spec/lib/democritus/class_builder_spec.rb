@@ -19,6 +19,11 @@ module Democritus
     its(:generate_class) { should be_a(Class) }
     its(:customization_module) { should be_a(Module) }
 
+    context '.constants' do
+      subject { described_class.new.generate_class.constants }
+      it { should include(:GeneratedMethods) }
+    end
+
     context '.command_name_for_method' do
       it 'converts single word method' do
         expect(described_class.command_name_for_method(:test)).to eq('Test')

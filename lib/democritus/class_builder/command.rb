@@ -6,7 +6,7 @@ module Democritus
     #
     # The expected interface for a Democritus::Command is as follows:
     #
-    # * Its #initialize method must accept a :builder keyword
+    # * Its #initialize method must accept a :builder keyword (i.e. `#initialize`)
     # * It responds to #call and #call does not accept any parameters
     class Command
       # @api public
@@ -21,6 +21,11 @@ module Democritus
       # @abstract Subclass and override #call to implement
       def call
         fail(NotImplementedError.new('Method #call should be overriden in child classes'))
+      end
+
+      # @api private
+      def defer(options = {}, &block)
+        builder.defer(options, &block)
       end
 
       private

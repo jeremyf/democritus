@@ -6,11 +6,32 @@ module Democritus
   class ClassBuilder
     def initialize
       self.customization_module = Module.new
+      self.generation_module = Module.new
+      self.class_operations = []
+      self.instance_operations = []
     end
 
     private
 
+    # The module that receives customized method definitions.
+    #
+    # @example
+    #   Democritus.build do |builder|
+    #     builder.a_command
+    #     def a_customization
+    #     end
+    #   end
+    #
+    # The above #a_customization method is captured in the customization_module and applied as an instance method
+    # to the generated class.
     attr_accessor :customization_module
+    attr_accessor :generation_module
+
+    # Command operations to be applied as class methods of the generated_class.
+    attr_accessor :class_operations
+
+    # Command operations to be applied as instance methods of the generated_class.
+    attr_accessor :instance_operations
 
     public
 
@@ -46,8 +67,32 @@ module Democritus
     #
     # @return Class object
     def generate_class
-      Class.new do
+      generation_mod = generation_module # get a local binding
+      customization_mod = customization_module # get a local binding
+      apply_operations(instance_operations, generation_mod)
+      generated_class = Class.new do
+        const_set :GeneratedMethods, generation_mod
+        const_set :Customizations, customization_mod
         include DemocritusObjectTag
+        include generation_mod
+        include customization_mod
+      end
+      generated_class
+    end
+
+    def defer(options = {}, &deferred_operation)
+      if options[:prepend]
+        instance_operations.unshift(deferred_operation)
+      else
+        instance_operations << deferred_operation
+      end
+    end
+
+    private
+
+    def apply_operations(operations, module_or_class)
+      operations.each do |operation|
+        operation.call(module_or_class)
       end
     end
 
