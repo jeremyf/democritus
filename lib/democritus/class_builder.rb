@@ -55,10 +55,10 @@ module Democritus
     private
 
     # @api public
-    def method_missing(method_name, *args, &block)
+    def method_missing(method_name, *args, command_namespace: Commands, &block)
       command_name = self.class.command_name_for_method(method_name)
-      if Commands.const_defined?(command_name)
-        command_class = Commands.const_get(command_name)
+      if command_namespace.const_defined?(command_name)
+        command_class = command_namespace.const_get(command_name)
         command_class.new(self, *args, &block).call
       else
         super

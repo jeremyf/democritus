@@ -7,6 +7,10 @@ module Democritus
       class TestCommand
       end
     end
+    module AlternateCommands
+      class AlternateTestCommand
+      end
+    end
   end
 
   RSpec.describe ClassBuilder do
@@ -26,6 +30,15 @@ module Democritus
 
     it 'responds to commands defined in ClassBuilder::Commands' do
       expect(subject).to respond_to(:test_command)
+    end
+
+    it 'translates method calls into namespaced command invocations including arguments' do
+      test_command = double
+      expect(described_class::AlternateCommands::AlternateTestCommand).to receive(:new).
+        with(subject, 'foo', 42).
+        and_return(test_command)
+      expect(test_command).to receive(:call).and_return('COMMAND RESULT')
+      expect(subject.alternate_test_command('foo', 42, command_namespace: described_class::AlternateCommands)).to eq('COMMAND RESULT')
     end
 
     it 'translates method calls into command invocations including arguments' do

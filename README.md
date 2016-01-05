@@ -12,7 +12,7 @@ I'm looking to apply the ideas put forward in Avdi Grimm's [Naught gem](https://
 ```ruby
 ApproveForm = Democritus.build do |builder|
   builder.form
-  builder.action_name('approve')
+  builder.action_name('approve', command_namespace: Sipity::DemocritusCommands)
   builder.attribute('agree_to_terms_of_service', type: :Boolean)
 end
 ```
