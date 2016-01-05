@@ -24,4 +24,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rspec", "~> 3.2"
   spec.add_development_dependency "rspec-its", "~> 1.2"
   spec.add_development_dependency "reek"
+  spec.add_development_dependency "flay"
 end
