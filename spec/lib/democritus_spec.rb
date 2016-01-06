@@ -7,7 +7,7 @@ RSpec.describe Democritus do
 
   context 'an object instantiated from Democritus.build' do
     subject { described_class.build.new }
-    it 'should be a DemocritusObjectTag' do
+    it 'will be a DemocritusObjectTag' do
       expect(subject).to be_a(Democritus::DemocritusObjectTag)
     end
   end

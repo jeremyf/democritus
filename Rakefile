@@ -11,4 +11,10 @@ unless Rake::Task.task_defined?('spec')
   end
 end
 
-task(default: 'spec')
+task(default: ['rubocop', 'spec'])
+
+require 'rubocop/rake_task'
+RuboCop::RakeTask.new do |task|
+  task.requires << 'rubocop-rspec'
+  task.options << "--config=.hound.yml"
+end
