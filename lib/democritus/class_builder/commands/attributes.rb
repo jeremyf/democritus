@@ -38,7 +38,7 @@ module Democritus
 
         def attribute(attribute_name, **options)
           attribute_names << attribute_name
-          builder.attribute(attribute_name, **options)
+          builder.attribute(name: attribute_name, **options)
         end
 
         attr_accessor :additional_configuration, :attribute_names

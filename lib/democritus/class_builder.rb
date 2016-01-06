@@ -6,11 +6,13 @@ module Democritus
   #
   # :reek:UnusedPrivateMethod: { exclude: [ !ruby/regexp /(method_missing|respond_to_missing)/ ] }
   class ClassBuilder
-    def initialize
+    # @param command_namespaces [Array<Module>] the sequential list of namespaces you want to check for each registered command.
+    def initialize(command_namespaces: default_command_namespaces)
       self.customization_module = Module.new
       self.generation_module = Module.new
       self.class_operations = []
       self.instance_operations = []
+      self.command_namespaces = command_namespaces
     end
 
     private
@@ -31,6 +33,17 @@ module Democritus
 
     # Command operations to be applied as class methods of the generated_class.
     attr_accessor :class_operations
+
+    def default_command_namespaces
+      [Democritus::ClassBuilder::Commands]
+    end
+
+    # The command namespaces that you want to use. Note, order is important
+    attr_reader :command_namespaces
+
+    def command_namespaces=(input)
+      @command_namespaces = Array(input)
+    end
 
     # Command operations to be applied as instance methods of the generated_class.
     attr_accessor :instance_operations
@@ -108,11 +121,12 @@ module Democritus
     private
 
     # @api public
-    def method_missing(method_name, *args, command_namespace: Commands, &block)
+    def method_missing(method_name, *args, **kargs, &block)
       command_name = self.class.command_name_for_method(method_name)
-      if command_namespace.const_defined?(command_name)
+      command_namespace = command_namespace_for(command_name)
+      if command_namespace
         command_class = command_namespace.const_get(command_name)
-        command_class.new(*args, builder: self, &block).call
+        command_class.new(*args, **kargs, builder: self, &block).call
       else
         super
       end
@@ -126,7 +140,12 @@ module Democritus
     # @api public
     def respond_to_definition(method_name, *)
       command_name = self.class.command_name_for_method(method_name)
-      Commands.const_defined?(command_name)
+      command_namespace_for(command_name)
+    end
+
+    # @api private
+    def command_namespace_for(command_name)
+      command_namespaces.detect { |cs| cs.const_defined?(command_name) }
     end
     # @!endgroup
 

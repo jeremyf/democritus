@@ -6,6 +6,8 @@ module Democritus
     module Commands
       class TestCommand
       end
+      class AlternateTestCommand
+      end
     end
     module AlternateCommands
       class AlternateTestCommand
@@ -14,7 +16,7 @@ module Democritus
   end
 
   RSpec.describe ClassBuilder do
-    subject { described_class.new }
+    subject { described_class.new(command_namespaces: [Democritus::ClassBuilder::AlternateCommands, Democritus::ClassBuilder::Commands]) }
 
     its(:generate_class) { should be_a(Class) }
     its(:customization_module) { should be_a(Module) }
@@ -40,10 +42,10 @@ module Democritus
     it 'translates method calls into namespaced command invocations including arguments' do
       test_command = double
       expect(described_class::AlternateCommands::AlternateTestCommand).to receive(:new).
-        with('foo', 42, builder: subject).
+        with(name: 'chicken', builder: subject).
         and_return(test_command)
       expect(test_command).to receive(:call).and_return('COMMAND RESULT')
-      expect(subject.alternate_test_command('foo', 42, command_namespace: described_class::AlternateCommands)).to eq('COMMAND RESULT')
+      expect(subject.alternate_test_command(name: 'chicken')).to eq('COMMAND RESULT')
     end
 
     it 'translates method calls into command invocations including arguments' do

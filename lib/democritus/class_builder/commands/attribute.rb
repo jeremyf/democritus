@@ -5,7 +5,7 @@ module Democritus
     module Commands
       # Command to assign an attribute to the given built class.
       class Attribute < ::Democritus::ClassBuilder::Command
-        def initialize(name, builder:, **options)
+        def initialize(name:, builder:, **options)
           self.builder = builder
           self.name = name
           self.options = options

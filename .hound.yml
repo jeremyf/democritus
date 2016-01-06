@@ -1,3 +1,4 @@
+require: rubocop-rspec
 ################################################################################
 ## Releasing the hounds in your local environment.
 ##

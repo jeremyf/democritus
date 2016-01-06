@@ -15,12 +15,12 @@ I'm looking to apply the ideas put forward in Avdi Grimm's [Naught gem](https://
 I would like to be able to declare in Ruby the following:
 
 ```ruby
-ApprovalForm = Democritus.build do |builder|
+ApprovalForm = Democritus.build(command_namespaces: ['Sipity::DemocritusCommands', 'Democritus::ClassBuilder::Commands']) do |builder|
   builder.form do
     attributes do
       attribute(name: 'agree_to_terms_of_service', type: 'Boolean', validates: 'acceptance')
     end
-    action_name(name: 'approval', command_namespace: 'Sipity::DemocritusCommands')
+    action_name(name: 'approval')
   end
 end
 ```
@@ -32,7 +32,7 @@ From that point forward, I would like to be able to create the class based on a 
 ```json
 {
   "form": {
-    "command_namespace:": "Sipity::DemocritusCommands",
+    "command_namespace:": ["Sipity::DemocritusCommands", "Democritus::ClassBuilder::Commands"],
     "attributes": [
       {
         "attribute": {
@@ -48,7 +48,7 @@ From that point forward, I would like to be able to create the class based on a 
 ```
 
 ```ruby
-ApprovalForm = Demcritus.build_from_json('file.json')
+ApprovalForm = Demcritus.build_from_json(json)
 ```
 
 ## Roadmap
