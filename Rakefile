@@ -11,10 +11,21 @@ unless Rake::Task.task_defined?('spec')
   end
 end
 
-task(default: ['rubocop', 'spec'])
-
 require 'rubocop/rake_task'
 RuboCop::RakeTask.new do |task|
   task.requires << 'rubocop-rspec'
   task.options << "--config=.hound.yml"
 end
+
+require 'reek/rake/task'
+Reek::Rake::Task.new do |task|
+  task.verbose = true
+end
+
+require 'flay_task'
+FlayTask.new do |task|
+  task.verbose = true
+  task.threshold = 20
+end
+
+task(default: ['rubocop', 'reek', 'flay', 'spec'])
