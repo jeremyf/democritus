@@ -69,6 +69,7 @@ module Democritus
     #
     # @return Class object
     #
+    # rubocop:disable MethodLength
     # :reek:TooManyStatements: { exclude: [ 'Democritus::ClassBuilder#generate_class' ] }
     def generate_class
       generation_mod = generation_module # get a local binding
@@ -83,6 +84,7 @@ module Democritus
       end
       generated_class
     end
+    # rubocop:enable MethodLength
 
     def defer(options = {}, &deferred_operation)
       if options[:prepend]
@@ -102,6 +104,7 @@ module Democritus
     end
 
     # @!group Method Missing
+
     private
 
     # @api public

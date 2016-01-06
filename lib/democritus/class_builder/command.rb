@@ -20,7 +20,7 @@ module Democritus
       #
       # @abstract Subclass and override #call to implement
       def call
-        fail(NotImplementedError.new('Method #call should be overriden in child classes'))
+        fail(NotImplementedError, 'Method #call should be overriden in child classes')
       end
 
       # @api private
