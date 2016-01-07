@@ -4,9 +4,10 @@ module Democritus
   #
   # Note the following structure:
   #
-  # ```json
-  # { "#command_name": { "keyword_param_one": "param_value", "#nested_command_name": { "nested_keyword_param": "nested_param_value"} } }
-  # ```
+  # @example
+  #   ```json
+  #   { "#command_name": { "keyword_param_one": "param_value", "#nested_command_name": { "nested_keyword_param": "nested_param_value"} } }
+  #   ```
   #
   # Commands that are called against the builder are Hash keys that start with '#'. Keywords are command parameters that
   # do not start with '#'.
@@ -15,8 +16,8 @@ module Democritus
   #   is parsing JSON and loading that into ruby; Its complicated. So I'm
   #   willing to accept and assume responsibility for this code "reek".
   #
-  # @see ./spec/lib/democritus/from_json_class_builder_spec.rb
   # @see Democritus::ClassBuilder::Commands
+  # @see Democritus::FromJsonClassBuilder::KEY_IS_COMMAND_REGEXP
   class FromJsonClassBuilder
     # @api public
     #
@@ -25,7 +26,22 @@ module Democritus
       self.data = json_document
     end
 
+    private
+
+    attr_reader :data
+
+    def data=(json_document)
+      @data = JSON.parse(json_document)
+    end
+
+    public
+
     # @api public
+    #
+    # A wrapper around the Democritus::ClassBuilder#generate_class. However instead of evaulating blocks, the builder must
+    # be called directly.
+    #
+    # @return Class object
     def generate_class
       keywords, nested_commands = extract_keywords_and_nested_commands(node: data)
       class_builder = ClassBuilder.new(**keywords)
@@ -33,7 +49,27 @@ module Democritus
       class_builder.generate_class
     end
 
+    KEY_IS_COMMAND_REGEXP = /\A\#(.+)$/.freeze
+
     private
+
+    # rubocop:disable MethodLength
+    # :reek:TooManyStatements: { exclude: [ 'Democritus::FromJsonClassBuilder#extract_keywords_and_nested_commands' ] }
+    # :reek:UtilityFunction: { exclude: [ 'Democritus::FromJsonClassBuilder#extract_keywords_and_nested_commands' ] }
+    def extract_keywords_and_nested_commands(node:)
+      keywords = {}
+      options = {}
+      node.each_pair do |key, value|
+        match_data = KEY_IS_COMMAND_REGEXP.match(key)
+        if match_data
+          options[match_data[1].to_sym] = value
+        else
+          keywords[key.to_sym] = value
+        end
+      end
+      return [keywords, options]
+    end
+    # rubocop:enable MethodLength
 
     # :reek:NestedIterators: { exclude: [ 'Democritus::FromJsonClassBuilder#build' ] }
     def build(node:, class_builder:)
@@ -55,32 +91,6 @@ module Democritus
           yield(command_name, keywords, nested_commands)
         end
       end
-    end
-
-    KEY_IS_COMMAND_REGEXP = /\A\#(.+)$/.freeze
-
-    # rubocop:disable MethodLength
-    # :reek:TooManyStatements: { exclude: [ 'Democritus::FromJsonClassBuilder#extract_keywords_and_nested_commands' ] }
-    # :reek:UtilityFunction: { exclude: [ 'Democritus::FromJsonClassBuilder#extract_keywords_and_nested_commands' ] }
-    def extract_keywords_and_nested_commands(node:)
-      keywords = {}
-      options = {}
-      node.each_pair do |key, value|
-        match_data = KEY_IS_COMMAND_REGEXP.match(key)
-        if match_data
-          options[match_data[1].to_sym] = value
-        else
-          keywords[key.to_sym] = value
-        end
-      end
-      return [keywords, options]
-    end
-    # rubocop:enable MethodLength
-
-    attr_reader :data
-
-    def data=(json_document)
-      @data = JSON.parse(json_document)
     end
   end
 end
