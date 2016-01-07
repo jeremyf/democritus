@@ -17,8 +17,11 @@ module Democritus
       end
 
       # @api public
-      #
       # @abstract Subclass and override #call to implement
+      #
+      # Responsible for applying changes to the class that is being built.
+      #
+      # @return void
       def call
         fail(NotImplementedError, 'Method #call should be overriden in child classes')
       end
