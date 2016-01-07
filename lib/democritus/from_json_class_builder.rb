@@ -2,14 +2,27 @@ require 'json'
 module Democritus
   # Responsible for building a class based on the given JSON document.
   #
+  # Note the following structure:
+  #
+  # ```json
+  # { "#command_name": { "keyword_param_one": "param_value", "#nested_command_name": { "nested_keyword_param": "nested_param_value"} } }
+  # ```
+  #
+  # Commands that are called against the builder are Hash keys that start with '#'. Keywords are command parameters that
+  # do not start with '#'.
+  #
   # @note This is a class with a greater "reek" than I would like. However, it
   #   is parsing JSON and loading that into ruby; Its complicated. So I'm
   #   willing to accept and assume responsibility for this code "reek".
   #
   # @see ./spec/lib/democritus/from_json_class_builder_spec.rb
+  # @see Democritus::ClassBuilder::Commands
   class FromJsonClassBuilder
-    def initialize(json)
-      self.data = json
+    # @api public
+    #
+    # @param json_document [String] A JSON document
+    def initialize(json_document)
+      self.data = json_document
     end
 
     # @api public
@@ -44,7 +57,7 @@ module Democritus
       end
     end
 
-    PARAMETER_KEY_REGEXP = /(\w+):$/.freeze
+    KEY_IS_COMMAND_REGEXP = /\A\#(.+)$/.freeze
 
     # rubocop:disable MethodLength
     # :reek:TooManyStatements: { exclude: [ 'Democritus::FromJsonClassBuilder#extract_keywords_and_options_from' ] }
@@ -53,11 +66,11 @@ module Democritus
       keywords = {}
       options = {}
       node.each_pair do |key, value|
-        match_data = PARAMETER_KEY_REGEXP.match(key)
+        match_data = KEY_IS_COMMAND_REGEXP.match(key)
         if match_data
-          keywords[match_data[1].to_sym] = value
+          options[match_data[1].to_sym] = value
         else
-          options[key] = value
+          keywords[key.to_sym] = value
         end
       end
       return [keywords, options]
