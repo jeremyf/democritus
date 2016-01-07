@@ -57,5 +57,5 @@ ApprovalForm = Demcritus.build_from_json(json)
   - [x] [Command::Attirubtes](./lib/democritus/class_builder/commands/attributes.rb)
 - [ ] Create the commands that build a Sipity processing form
 - [X] Build class from JSON configuration
-  - [ ] Basic case for nested commands
-  - [ ] Allow for "constantization" of command_namespaces option.
+  - [X] Basic case for nested commands
+  - [X] Allow for "constantization" of command_namespaces option.

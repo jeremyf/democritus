@@ -16,7 +16,7 @@ module Democritus
   end
 
   RSpec.describe ClassBuilder do
-    subject { described_class.new(command_namespaces: [Democritus::ClassBuilder::AlternateCommands, Democritus::ClassBuilder::Commands]) }
+    subject { described_class.new(command_namespaces: ['Democritus::ClassBuilder::AlternateCommands', Democritus::ClassBuilder::Commands]) }
 
     its(:generate_class) { should be_a(Class) }
     its(:customization_module) { should be_a(Module) }

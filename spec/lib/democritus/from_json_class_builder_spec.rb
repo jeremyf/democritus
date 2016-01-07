@@ -4,6 +4,7 @@ RSpec.describe Democritus::FromJsonClassBuilder do
   let(:json) do
     doc = <<-DOC
     {
+      "command_namespaces": ["Democritus::ClassBuilder::Commands"],
       "#attributes": {
         "#attribute": [
           { "name": "agree_to_terms_of_service", "type": "Boolean", "validates": "acceptance" }

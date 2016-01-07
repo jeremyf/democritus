@@ -43,7 +43,14 @@ module Democritus
     attr_reader :command_namespaces
 
     def command_namespaces=(input)
-      @command_namespaces = Array(input)
+      @command_namespaces = Array(input).map do |command_namespace|
+        case command_namespace
+        when Module, Class
+          command_namespace
+        else
+          Object.const_get(command_namespace.to_s)
+        end
+      end
     end
 
     # Command operations to be applied as instance methods of the generated_class.
