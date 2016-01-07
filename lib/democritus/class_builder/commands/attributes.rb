@@ -22,24 +22,24 @@ module Democritus
         # :reek:NestedIterators: { exclude: [ 'Democritus::ClassBuilder::Commands::Attributes#call' ] }
         # :reek:TooManyStatements: { exclude: [ 'Democritus::ClassBuilder::Commands::Attributes#call' ] }
         def call
-          instance_exec(builder, &additional_configuration)
+          instance_exec(self, &additional_configuration) if additional_configuration.respond_to?(:call)
           defer do |subject|
             subject.module_exec(@attribute_names) do |attribute_names|
               define_method(:initialize) do |**attributes|
                 attribute_names.each do |attribute_name|
-                  send("#{attribute_name}=", attributes.fetch(attribute_name, nil))
+                  send("#{attribute_name}=", attributes.fetch(attribute_name.to_sym, nil))
                 end
               end
             end
           end
         end
 
-        private
-
-        def attribute(attribute_name, **options)
-          attribute_names << attribute_name
-          builder.attribute(name: attribute_name, **options)
+        def attribute(name:, **options)
+          attribute_names << name.to_sym
+          builder.attribute(name: name.to_sym, **options)
         end
+
+        private
 
         attr_accessor :additional_configuration, :attribute_names
       end

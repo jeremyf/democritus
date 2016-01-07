@@ -1,5 +1,7 @@
 require "democritus/version"
 require 'democritus/class_builder'
+require 'democritus/class_builder/commands'
+require 'democritus/from_json_class_builder'
 
 # Compose objects by leveraging a DSL for class creation.
 # Yes, we can write code that conforms to interfaces, but in my experience, as the Ruby object ecosystem has grown, so too has the needs
@@ -14,6 +16,16 @@ module Democritus
   def self.build(&configuration_block)
     builder = ClassBuilder.new
     builder.customize(&configuration_block)
+    builder.generate_class
+  end
+
+  # @api public
+  #
+  # Responsible for building a class based on the given JSON object.
+  #
+  # @return Class
+  def self.build_from_json(json)
+    builder = FromJsonClassBuilder.new(json)
     builder.generate_class
   end
 

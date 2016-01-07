@@ -7,8 +7,8 @@ module Democritus
       let(:attribute_class) do
         Democritus.build do |builder|
           builder.attributes do
-            attribute(:name)
-            attribute(:coolness_factor)
+            attribute(name: :name)
+            attribute(name: :coolness_factor)
           end
         end
       end

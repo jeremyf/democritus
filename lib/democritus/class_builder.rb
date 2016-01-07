@@ -126,7 +126,7 @@ module Democritus
       command_namespace = command_namespace_for(command_name)
       if command_namespace
         command_class = command_namespace.const_get(command_name)
-        command_class.new(*args, **kargs, builder: self, &block).call
+        command_class.new(*args, **kargs.merge(builder: self), &block).call
       else
         super
       end

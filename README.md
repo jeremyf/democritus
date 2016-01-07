@@ -31,17 +31,15 @@ From that point forward, I would like to be able to create the class based on a 
 
 ```json
 {
+  "command_namespaces:": ["Sipity::DemocritusCommands", "Democritus::ClassBuilder::Commands"],
   "form": {
-    "command_namespace:": ["Sipity::DemocritusCommands", "Democritus::ClassBuilder::Commands"],
-    "attributes": [
-      {
-        "attribute": {
-          "name": "agree_to_terms_of_service", "type": "Boolean", "validates": "acceptance"
-        }
-      }
-    ]},
+    "attributes": {
+      "attribute": [
+        { "name:": "agree_to_terms_of_service", "type:": "Boolean", "validates:": "acceptance" }
+      ]
+    },
     "action_name": {
-      "name": "approval", "command_namespace": "Sipity::DemocritusCommands"
+      "name:": "approval", "command_namespace:": "Sipity::DemocritusCommands"
     }
   }
 }

@@ -11,4 +11,11 @@ RSpec.describe Democritus do
       expect(subject).to be_a(Democritus::DemocritusObjectTag)
     end
   end
+
+  context 'an object instantiated from Democritus.build_from_json' do
+    subject { described_class.build_from_json('{}').new }
+    it 'will be a DemocritusObjectTag' do
+      expect(subject).to be_a(Democritus::DemocritusObjectTag)
+    end
+  end
 end
