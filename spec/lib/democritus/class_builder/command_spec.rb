@@ -1,6 +1,5 @@
 require 'spec_helper'
 require 'democritus/class_builder/command'
-require 'shoulda/matchers'
 
 describe Democritus::ClassBuilder::Command do
   subject { described_class.new(builder: nil) }
