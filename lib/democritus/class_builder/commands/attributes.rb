@@ -22,6 +22,8 @@ module Democritus
         # :reek:NestedIterators: { exclude: [ 'Democritus::ClassBuilder::Commands::Attributes#call' ] }
         # :reek:TooManyStatements: { exclude: [ 'Democritus::ClassBuilder::Commands::Attributes#call' ] }
         def call
+          # It may seem a little odd to yield self via an instance_exec, however in some cases I need a
+          # receiver for messages (i.e. FromJsonClassBuilder)
           instance_exec(self, &additional_configuration) if additional_configuration.respond_to?(:call)
           defer do |subject|
             subject.module_exec(@attribute_names) do |attribute_names|
