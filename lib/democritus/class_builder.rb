@@ -34,6 +34,7 @@ module Democritus
     # Command operations to be applied as class methods of the generated_class.
     attr_accessor :class_operations
 
+    # The default namespaces in which Democritus will look up commands.
     def default_command_namespaces
       [Democritus::ClassBuilder::Commands]
     end
@@ -99,7 +100,14 @@ module Democritus
     end
     # rubocop:enable MethodLength
 
-    def defer(options = {}, &deferred_operation)
+    # @api public
+    #
+    # When configuring the class that is being built, we don't want to apply all of the modifications at once, instead allowing them
+    # to be applied in a specified order.
+    #
+    # @param options [Hash]
+    # @param defered_operation [#call]
+    def defer(**options, &deferred_operation)
       if options[:prepend]
         instance_operations.unshift(deferred_operation)
       else
