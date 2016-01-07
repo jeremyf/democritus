@@ -27,9 +27,9 @@ module Democritus
 
     # @api public
     def generate_class
-      keywords, options = extract_keywords_and_options_from(node: data)
+      keywords, nested_commands = extract_keywords_and_nested_commands(node: data)
       class_builder = ClassBuilder.new(**keywords)
-      build(node: options, class_builder: class_builder)
+      build(node: nested_commands, class_builder: class_builder)
       class_builder.generate_class
     end
 
@@ -38,9 +38,9 @@ module Democritus
     # :reek:NestedIterators: { exclude: [ 'Democritus::FromJsonClassBuilder#build' ] }
     def build(node:, class_builder:)
       json_class_builder = self # establishing local binding
-      each_command(node: node) do |command, keywords, nested_node|
-        class_builder.public_send(command, **keywords) do |nested_builder|
-          json_class_builder.send(:build, node: nested_node, class_builder: nested_builder)
+      each_command(node: node) do |command_name, keywords, nested_commands|
+        class_builder.public_send(command_name, **keywords) do |nested_builder|
+          json_class_builder.send(:build, node: nested_commands, class_builder: nested_builder)
         end
       end
     end
@@ -48,11 +48,11 @@ module Democritus
     # :reek:NestedIterators: { exclude: [ 'Democritus::FromJsonClassBuilder#each_command' ] }
     # :reek:FeatureEnvy: { exclude: [ 'Democritus::FromJsonClassBuilder#each_command' ] }
     def each_command(node:)
-      node.each_pair do |key, values|
-        values = [values] unless values.is_a?(Array)
-        values.each do |value|
-          keywords, options = extract_keywords_and_options_from(node: value)
-          yield(key, keywords, options)
+      node.each_pair do |command_name, nested_nodes|
+        nested_nodes = [nested_nodes] unless nested_nodes.is_a?(Array)
+        nested_nodes.each do |nested_node|
+          keywords, nested_commands = extract_keywords_and_nested_commands(node: nested_node)
+          yield(command_name, keywords, nested_commands)
         end
       end
     end
@@ -60,9 +60,9 @@ module Democritus
     KEY_IS_COMMAND_REGEXP = /\A\#(.+)$/.freeze
 
     # rubocop:disable MethodLength
-    # :reek:TooManyStatements: { exclude: [ 'Democritus::FromJsonClassBuilder#extract_keywords_and_options_from' ] }
-    # :reek:UtilityFunction: { exclude: [ 'Democritus::FromJsonClassBuilder#extract_keywords_and_options_from' ] }
-    def extract_keywords_and_options_from(node:)
+    # :reek:TooManyStatements: { exclude: [ 'Democritus::FromJsonClassBuilder#extract_keywords_and_nested_commands' ] }
+    # :reek:UtilityFunction: { exclude: [ 'Democritus::FromJsonClassBuilder#extract_keywords_and_nested_commands' ] }
+    def extract_keywords_and_nested_commands(node:)
       keywords = {}
       options = {}
       node.each_pair do |key, value|
