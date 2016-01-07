@@ -1,3 +1,5 @@
+require 'forwardable'
+
 module Democritus
   class ClassBuilder
     # @api public
@@ -26,10 +28,8 @@ module Democritus
         fail(NotImplementedError, 'Method #call should be overriden in child classes')
       end
 
-      # @api private
-      def defer(options = {}, &block)
-        builder.defer(options, &block)
-      end
+      extend Forwardable
+      def_delegator :builder, :defer
 
       private
 
