@@ -105,8 +105,11 @@ module Democritus
     # When configuring the class that is being built, we don't want to apply all of the modifications at once, instead allowing them
     # to be applied in a specified order.
     #
-    # @param options [Hash]
+    # @param [Hash] options
+    # @option options [Boolean] :prepend Is there something about this deferred_operation that should happen first?
     # @param defered_operation [#call]
+    #
+    # @return void
     def defer(**options, &deferred_operation)
       if options[:prepend]
         instance_operations.unshift(deferred_operation)
