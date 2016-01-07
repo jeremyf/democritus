@@ -35,8 +35,9 @@ module Democritus
         end
 
         def attribute(name:, **options)
-          attribute_names << name.to_sym
-          builder.attribute(name: name.to_sym, **options)
+          name = name.to_sym
+          attribute_names << name
+          builder.attribute(name: name, **options)
         end
 
         private
