@@ -114,7 +114,7 @@ module Democritus
     #
     # @param [Hash] options
     # @option options [Boolean] :prepend Is there something about this deferred_operation that should happen first?
-    # @param defered_operation [#call]
+    # @param defered_operation [#call] The operation that will be applied to the generated class
     #
     # @return void
     def defer(**options, &deferred_operation)
