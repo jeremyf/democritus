@@ -2,6 +2,9 @@
 
 [![Build Status](https://travis-ci.org/jeremyf/democritus.png?branch=master)](https://travis-ci.org/jeremyf/democritus)
 [![APACHE 2 License](http://img.shields.io/badge/APACHE2-license-blue.svg)](./LICENSE)
+[![Code Climate](https://codeclimate.com/github/jeremyf/democritus.png)](https://codeclimate.com/github/jeremyf/democritus)
+[![Test Coverage](https://codeclimate.com/github/jeremyf/democritus/badges/coverage.svg)](https://codeclimate.com/github/jeremyf/democritus)
+[![Documentation Status](http://inch-ci.org/github/jeremyf/democritus.svg?branch=master)](http://inch-ci.org/github/jeremyf/democritus)
 
 Democritus is a plugin for building class from reusable components.
 
@@ -55,4 +58,6 @@ ApprovalForm = Demcritus.build_from_json(json)
   - [x] [Command::Attribute](./lib/democritus/class_builder/commands/attribute.rb)
   - [x] [Command::Attirubtes](./lib/democritus/class_builder/commands/attributes.rb)
 - [ ] Create the commands that build a Sipity processing form
-- [ ] Build class from JSON configuration
+- [X] Build class from JSON configuration
+  - [ ] Basic case for nested commands
+  - [ ] Allow for "constantization" of command_namespaces option.
