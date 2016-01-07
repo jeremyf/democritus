@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Jeremy Friesen"]
   spec.email         = ["jeremy.n.friesen@gmail.com"]
 
-  spec.summary       = %q{A placeholder for an attribute declaration mechanism}
-  spec.description   = %q{A placeholder for an attribute declaration mechanism}
+  spec.summary       = %q{Democritus is library for building classes from reusable components.}
+  spec.description   = %q{Democritus is library for building classes from reusable components.}
   spec.homepage      = "https://github.com/jeremyf/democritus"
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
