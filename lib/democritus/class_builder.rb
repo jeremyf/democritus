@@ -139,6 +139,14 @@ module Democritus
     private
 
     # @api public
+    #
+    # The guts of the Democritus plugin system. The ClassBuilder brokers missing methods to registered commands within the
+    # CommandNamespace.
+    #
+    # @param method_name [Symbol] Name of the message being sent to this object
+    # @param args Non-keyword arguments for the message sent to this object
+    # @param kargs Keyword arguments for the message sent to this object
+    # @param block Block argument for the message sent to this object
     def method_missing(method_name, *args, **kargs, &block)
       command_name = self.class.command_name_for_method(method_name)
       command_namespace = command_namespace_for(command_name)
@@ -151,17 +159,26 @@ module Democritus
     end
 
     # @api public
+    #
+    # A required sibling method when implementing #method_missing
+    #
+    # @param method_name [Symbol] Name of the message being sent to this object
+    # @param args Additional arguments passed to the query
+    # @return Boolean
     def respond_to_missing?(method_name, *args)
       respond_to_definition(method_name, :respond_to_missing?, *args)
     end
 
-    # @api public
+    # @api private
     def respond_to_definition(method_name, *)
       command_name = self.class.command_name_for_method(method_name)
       command_namespace_for(command_name)
     end
 
     # @api private
+    #
+    # Find the first matching the command_namespace that contains the given
+    # command_name
     def command_namespace_for(command_name)
       command_namespaces.detect { |cs| cs.const_defined?(command_name) }
     end
