@@ -12,29 +12,50 @@ module Democritus
       #   end
       class Attributes < ::Democritus::ClassBuilder::Command
         # @param builder [Democritus::ClassBuilder]
-        # @param additional_configuration [Proc] A means to nest additional configuration
-        def initialize(builder:, &additional_configuration)
+        # @param pre_deferment_operation [Proc] A means to nest additional operations
+        def initialize(builder:, &pre_deferment_operation)
           self.builder = builder
-          self.additional_configuration = additional_configuration
+          self.pre_deferment_operation = pre_deferment_operation
           self.attribute_names = []
         end
 
-        # :reek:NestedIterators: { exclude: [ 'Democritus::ClassBuilder::Commands::Attributes#call' ] }
-        # :reek:TooManyStatements: { exclude: [ 'Democritus::ClassBuilder::Commands::Attributes#call' ] }
+        # @api public
+        #
+        # Method that generates the behavior for the Attributes command
+        #
+        # @return void
+        # @see Democritus::ClassBuilder#defer
         def call
+          # In order to register any nested attributes, the pre_deferment_operation must be performed
+          # outside of the defer method call. If it were done inside the defer block, then the pre_deferment_operation
+          # might get lost.
+          execute_pre_deferment_operation
+          defer { |subject| configure(subject: subject) }
+        end
+
+        private
+
+        def execute_pre_deferment_operation
+          return unless pre_deferment_operation.respond_to?(:call)
           # It may seem a little odd to yield self via an instance_exec, however in some cases I need a
           # receiver for messages (i.e. FromJsonClassBuilder)
-          instance_exec(self, &additional_configuration) if additional_configuration.respond_to?(:call)
-          defer do |subject|
-            subject.module_exec(@attribute_names) do |attribute_names|
-              define_method(:initialize) do |**attributes|
-                attribute_names.each do |attribute_name|
-                  send("#{attribute_name}=", attributes.fetch(attribute_name.to_sym, nil))
-                end
+          instance_exec(self, &pre_deferment_operation)
+        end
+
+        # :reek:NestedIterators: { exclude: [ 'Democritus::ClassBuilder::Commands::Attributes#configure' ] }
+        def configure(subject:)
+          subject.module_exec(@attribute_names) do |attribute_names|
+            define_method(:initialize) do |**attributes|
+              attribute_names.each do |attribute_name|
+                send("#{attribute_name}=", attributes.fetch(attribute_name.to_sym, nil))
               end
             end
           end
         end
+
+        public
+
+        # @!group Commands Available Within the pre_deferment_operation
 
         # @api public
         #
@@ -51,9 +72,11 @@ module Democritus
           builder.attribute(name: name, **options)
         end
 
+        # @!endgroup
+
         private
 
-        attr_accessor :additional_configuration
+        attr_accessor :pre_deferment_operation
 
         # [Array] of attribute names that have been generated
         attr_accessor :attribute_names
