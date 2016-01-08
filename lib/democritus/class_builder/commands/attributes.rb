@@ -36,6 +36,15 @@ module Democritus
           end
         end
 
+        # @api public
+        #
+        # Exposes a mechanism for assigning individual attributes as part of the #attributes command.
+        #
+        # @param name [#to_sym] the name of the attribute
+        # @param options [Hash] additional options passed to the builder#attribute command
+        #
+        # @see Democritus::ClassBuilder::Commands::Attribute
+        # @see Democritus::ClassBuilder
         def attribute(name:, **options)
           name = name.to_sym
           attribute_names << name
@@ -44,7 +53,10 @@ module Democritus
 
         private
 
-        attr_accessor :additional_configuration, :attribute_names
+        attr_accessor :additional_configuration
+
+        # [Array] of attribute names that have been generated
+        attr_accessor :attribute_names
       end
     end
   end
