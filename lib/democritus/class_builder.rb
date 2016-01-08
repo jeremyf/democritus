@@ -167,6 +167,8 @@ module Democritus
     # @param args Non-keyword arguments for the message sent to this object
     # @param kargs Keyword arguments for the message sent to this object
     # @param block Block argument for the message sent to this object
+    # @return void if there is a Command object that is called
+    # @return unknown if no Command object is found
     def method_missing(method_name, *args, **kargs, &block)
       command_name = self.class.command_name_for_method(method_name)
       command_namespace = command_namespace_for(command_name)
