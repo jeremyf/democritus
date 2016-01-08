@@ -49,6 +49,7 @@ module Democritus
       class_builder.generate_class
     end
 
+    # Used to answer the question "Does the given Hash key represent a command?"
     KEY_IS_COMMAND_REGEXP = /\A\#(.+)$/.freeze
 
     private

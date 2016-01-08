@@ -8,11 +8,23 @@ require 'democritus/from_json_class_builder'
 # for understanding the galaxy of objects.
 module Democritus
   # @api public
+  # @since 0.1.0
   #
   # Responsible for building a class based on atomic components.
   #
-  # @yield [Democritus::ClassBuilder] Gives a builder to provide additional command style customizations
+  # @yield [Democritus::ClassBuilder] a builder object to provide additional command style customizations
   # @return Class
+  #
+  # @example
+  #   NamedPerson = Democritus.build do |builder|
+  #     builder.attributes do
+  #       attribute(name: :given_name)
+  #       attribute(name: :surname)
+  #     end
+  #   end
+  #   NamedPerson.new(given_name: 'Farrokh', surname: 'Bulsara')
+  #
+  # @see Demcoritus::ClassBuilder
   def self.build(&configuration_block)
     builder = ClassBuilder.new
     builder.customize(&configuration_block)
@@ -20,10 +32,21 @@ module Democritus
   end
 
   # @api public
+  # @since 0.2.0
   #
   # Responsible for building a class based on the given JSON object.
   #
+  # @param [String] A "well-formed" JSON document
   # @return Class
+  #
+  #   NamedPerson = Democritus.build_from_json(%{
+  #     "#attributes": {
+  #       "#attribute": [{ "name": "given_name" }, { "name": "surname"}]
+  #     }
+  #   })
+  #   NamedPerson.new(given_name: 'Farrokh', surname: 'Bulsara')
+  #
+  # @see Demcoritus::FromJsonClassBuilder for details on "well-formed"
   def self.build_from_json(json)
     builder = FromJsonClassBuilder.new(json)
     builder.generate_class

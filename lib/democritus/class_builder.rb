@@ -29,6 +29,17 @@ module Democritus
     # The above #a_customization method is captured in the customization_module and applied as an instance method
     # to the generated class.
     attr_accessor :customization_module
+
+    # The module with the generated code.
+    #
+    # @example
+    #   Democritus.build do |builder|
+    #     builder.a_command
+    #     def a_customization
+    #     end
+    #   end
+    #
+    # The above `builder.a_command` invocation is captured and is applied to the generation_module.
     attr_accessor :generation_module
 
     # Command operations to be applied as class methods of the generated_class.
@@ -97,10 +108,14 @@ module Democritus
       customization_mod = customization_module # get a local binding
       apply_operations(instance_operations, generation_mod)
       generated_class = Class.new do
+        # requires the local binding from above
         const_set :GeneratedMethods, generation_mod
         const_set :Customizations, customization_mod
+        # because == and case operators are useful
         include DemocritusObjectTag
         include generation_mod
+
+        # customization should be applied last as it allows for "overrides" of generated methods
         include customization_mod
       end
       generated_class
