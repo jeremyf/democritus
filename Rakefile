@@ -30,3 +30,4 @@ FlayTask.new do |task|
 end
 
 task(default: ['rubocop', 'reek', 'flay', 'spec'])
+task(release: :default)
