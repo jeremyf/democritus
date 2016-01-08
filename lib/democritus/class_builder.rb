@@ -112,6 +112,11 @@ module Democritus
     # When configuring the class that is being built, we don't want to apply all of the modifications at once, instead allowing them
     # to be applied in a specified order.
     #
+    # @example
+    #   Democritus::ClassBuilder.new.defer(prepend: true) do
+    #     define_method(:help) { 'Did you try turning it off and on again?' }
+    #   end
+    #
     # @param [Hash] options
     # @option options [Boolean] :prepend Is there something about this deferred_operation that should happen first?
     # @param defered_operation [#call] The operation that will be applied to the generated class
